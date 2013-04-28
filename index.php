@@ -4,7 +4,7 @@
 <?php
   $app_id = '519404198096257';
   $app_secret = '586e0fb7210204eb364143c2cf6de381';
-  $my_url = 'http://54.214.20.45/index.php';
+  $my_url = 'http://secret-ocean-1139.herokuapp.com';
 
   $code = $_REQUEST["code"];
 
