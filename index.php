@@ -1,6 +1,5 @@
-<html><body><h1>It works!</h1>
-<p>This is the default web page for this server.</p>
-<p>The web server software is running but no content has been added, yet.</p>
+<html><body>
+
 <?php
   $app_id = '519404198096257';
   $app_secret = '586e0fb7210204eb364143c2cf6de381';
@@ -14,7 +13,7 @@
     . $app_id . '&redirect_uri=' . urlencode($my_url) . "&scope=read_mailbox";
     echo("<script>top.location.href='" . $dialog_url . "'</script>");
   }
-
+  
   // get user access_token
   $token_url = 'https://graph.facebook.com/oauth/access_token?client_id='
     . $app_id . '&redirect_uri=' . urlencode($my_url) 
@@ -23,32 +22,19 @@
 
   // response is of the format "access_token=AAAC..."
   $access_token = substr(file_get_contents($token_url), 13);
-
-  // run fql query
+  
+  // run fql query to get messages
   $fql_query_url = 'https://graph.facebook.com/'
-    . 'fql?q=SELECT+uid2+FROM+friend+WHERE+uid1=me()'
+    . 'fql?q=SELECT+created_time+FROM+message+WHERE+thread_id+IN+(SELECT+thread_id+FROM thread+WHERE+folder_id+IN+(0,1))+AND+author_id=me()'
     . '&access_token=' . $access_token;
   $fql_query_result = file_get_contents($fql_query_url);
   $fql_query_obj = json_decode($fql_query_result, true);
-
+  
   // display results of fql query
   echo '<pre>';
   print_r("query results:");
   print_r($fql_query_obj);
   echo '</pre>';
 
-  // run fql multiquery
-  $fql_multiquery_url = 'https://graph.facebook.com/'
-    . 'fql?q={"q1":"SELECT+thread_id1+FROM+thread+WHERE+folder_id=1",'
-    . '"q2":"SELECT+body+FROM+message+WHERE+thread_id+IN+(SELECT+thread_id1+FROM+#q1)"}'
-    . '&access_token=' . $access_token;
-  $fql_multiquery_result = file_get_contents($fql_multiquery_url);
-  $fql_multiquery_obj = json_decode($fql_multiquery_result, true);
-
-  // display results of fql multiquery
-  echo '<pre>';
-  print_r("multi query results:");
-  print_r($fql_multiquery_obj);
-  echo '</pre>';
 ?>
 </body></html>
