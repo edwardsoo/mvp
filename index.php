@@ -11,7 +11,7 @@
  // auth user
  if(empty($code)) {
     $dialog_url = 'https://www.facebook.com/dialog/oauth?client_id=' 
-    . $app_id . '&redirect_uri=' . urlencode($my_url) ;
+    . $app_id . '&redirect_uri=' . urlencode($my_url) . "&scope=read_mailbox";
     echo("<script>top.location.href='" . $dialog_url . "'</script>");
   }
 
@@ -39,8 +39,8 @@
 
   // run fql multiquery
   $fql_multiquery_url = 'https://graph.facebook.com/'
-    . 'fql?q={"all+friends":"SELECT+uid2+FROM+friend+WHERE+uid1=me()",'
-    . '"my+name":"SELECT+name+FROM+user+WHERE+uid=me()"}'
+    . 'fql?q={"q1":"SELECT+thread_id1+FROM+thread+WHERE+folder_id=1",'
+    . '"q2":"SELECT+body+FROM+message+WHERE+thread_id+IN+(SELECT+thread_id1+FROM+#q1)"}'
     . '&access_token=' . $access_token;
   $fql_multiquery_result = file_get_contents($fql_multiquery_url);
   $fql_multiquery_obj = json_decode($fql_multiquery_result, true);
