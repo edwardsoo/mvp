@@ -11,42 +11,8 @@ $facebook = new Facebook($config);
 $user = $facebook->getUser();
 
 // Login or logout url will be needed depending on current user state.
-// Query PM data
 if ($user) {
   $logoutUrl = $facebook->getLogoutUrl();
-  $params = array(
-    'method' => 'fql.query',
-    'query' => 'SELECT created_time FROM message WHERE thread_id IN (SELECT thread_id FROM thread WHERE folder_id IN (0,1)) AND author_id=me()');
-  $rs1 = $facebook->api($params);
-  $params = array(
-    'method' => 'fql.query',
-    'query' => 'SELECT created_time FROM message WHERE thread_id IN (SELECT thread_id FROM thread WHERE folder_id IN (0,1)) AND author_id != me()');
-  $rs2 = $facebook->api($params);
-
-  // count the number of sent message
-  $sent_counts = array();
-  foreach($rs1 as $key => $comment) {
-    var_dump($comment);
-    $year = date('Y', intval($comment['created_time']));
-    if (isset($sent_counts[$year])) {
-      $sent_counts[$year]++;
-    } else {
-      $sent_counts[$year] = 1;
-    }
-  }
-
-  // count the number of received message
-  $recv_counts = array();
-  foreach($rs2 as $key => $comment) {
-    var_dump($comment);
-    $year = date('Y', intval($comment['created_time']));
-    if (isset($recv_counts[$year])) {
-      $recv_counts[$year]++;
-    } else {
-      $recv_counts[$year] = 1;
-    }
-  }
-
 
 } else {
   $loginUrl = $facebook->getLoginUrl(array(
@@ -58,11 +24,31 @@ if ($user) {
 <!doctype html>
 <html xmlns:fb="http://www.facebook.com/2008/fbml">
 <head>
-  <title>PM histogram</title>
+  <script type="text/javascript" src="jquery.js"></script> 
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Year', 'Sales', 'Expenses'],
+          ['2004',  1000,      400],
+          ['2005',  1170,      460],
+          ['2006',  660,       1120],
+          ['2007',  1030,      540]
+        ]);
+
+        var options = {
+          title: 'Message Count'
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+  <title>Facebook message histogram</title>
 </head>
 <body>
-  <h1>php-sdk</h1>
-
   <?php if ($user): ?>
   <a href="<?php echo $logoutUrl; ?>">Logout</a>
 <?php else: ?>
@@ -72,8 +58,8 @@ if ($user) {
 <?php endif ?>
 
 <?php if ($user): ?>
-  <pre><?php print_r($sent_counts); ?></pre>
-  <pre><?php print_r($recv_counts); ?></pre>
+  <h2>Message count</h2>
+  <div id="chart_div" style="width: 900px; height: 500px;"></div>
 <?php else: ?>
   <strong><em>You are not Connected.</em></strong>
 <?php endif ?>

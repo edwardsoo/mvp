@@ -24,7 +24,6 @@ if ($user) {
   // count the number of sent message
   $sent_counts = array();
   foreach($rs1 as $key => $comment) {
-    var_dump($comment);
     $year = date('Y', intval($comment['created_time']));
     if (isset($sent_counts[$year])) {
       $sent_counts[$year]++;
@@ -36,7 +35,6 @@ if ($user) {
   // count the number of received message
   $recv_counts = array();
   foreach($rs2 as $key => $comment) {
-    var_dump($comment);
     $year = date('Y', intval($comment['created_time']));
     if (isset($recv_counts[$year])) {
       $recv_counts[$year]++;
