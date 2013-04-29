@@ -1,10 +1,9 @@
 <?php
-require 'facebook-php-sdk/src/facebook.php';
+require_once 'facebook-php-sdk/src/facebook.php';
 
 $config = array(
   'appId'  => '519404198096257',
   'secret' => '586e0fb7210204eb364143c2cf6de381',
-  'cookie' => true,
   );
 
 $facebook = new Facebook($config);

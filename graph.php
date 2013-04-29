@@ -1,5 +1,5 @@
 <?php
-require 'facebook-php-sdk/src/facebook.php';
+require_once 'facebook-php-sdk/src/facebook.php';
 $config = array(
   'appId'  => '519404198096257',
   'secret' => '586e0fb7210204eb364143c2cf6de381',
@@ -65,32 +65,8 @@ session_start();
 </head>
 <body>
   <div class="container">
-    <h1>Facebook message count</h1>
-    <div class="navbar navbar-inverse">
-      <div class="navbar-inner">
-        <div class="container">
-          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <div class="nav-collapse collapse">
-            <ul class="nav">
-              <li>
-                <img src="https://graph.facebook.com/<?php echo $user; ?>/picture">
-              </li>
-              <li>
-                <a href="logout.php">
-                  Logout
-                </a>
-              </li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
-    
-    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+    <?php include 'nav.php'; ?>
+    <div id="chart_div" style="width: 900px; height: 500px;">Loading...</div>
   </div>
 </body>
 </html>
