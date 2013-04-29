@@ -5,7 +5,6 @@ require 'facebook-php-sdk/src/facebook.php';
 $config = array(
   'appId'  => '519404198096257',
   'secret' => '586e0fb7210204eb364143c2cf6de381',
-  'cookie' => true,
   );
 
 $facebook = new Facebook($config);
@@ -21,7 +20,9 @@ $loginUrl = $facebook->getLoginUrl(array(
 <!doctype html>
 <html>
 <head>
-  <script type="text/javascript" src="jquery.js"></script> 
+  <link href="css/bootstrap.css" rel="stylesheet">
+  <link href="css/flat-ui.css" rel="stylesheet">
+  <script type="text/javascript" src="js/jquery-1.8.2.min.js"></script> 
   <script type="text/javascript" src="https://www.google.com/jsapi"></script>
   <script type="text/javascript">
   google.load("visualization", "1", {packages:["corechart"]});
@@ -63,24 +64,24 @@ $loginUrl = $facebook->getLoginUrl(array(
   <title>Your facebook message count</title>
 </head>
 <body>
-  <?php echo $user ?>
-  <?php if ($user): ?>
-  <a href="<?php echo $logoutUrl; ?>">Logout</a>
-<?php else: ?>
-  <div>
-    <a href="<?php echo $loginUrl; ?>">Login with Facebook</a>
+  <div class="container">
+    <?php if ($user): ?>
+    <div class="span3">
+      <a href="<?php echo $logoutUrl; ?>" class="btn btn-large btn-block btn-info">Logout</a>
+    </div>
+  <?php else: ?>
+  <div class="span3">
+    <a href="<?php echo $loginUrl; ?>" class="btn btn-large btn-block btn-info">Login with Facebook</a>
   </div>
 <?php endif ?>
-
 <?php if ($user): ?>
-  <h2>Message count</h2>
   <script>
   google.setOnLoadCallback(drawChart);
   </script>
   <div id="chart_div" style="width: 900px; height: 500px;"></div>
 <?php else: ?>
-  <strong><em>You are not Connected.</em></strong>
 <?php endif ?>
+</div>
 </body>
 </html>
 
