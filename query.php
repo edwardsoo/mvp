@@ -4,6 +4,7 @@ require 'facebook-php-sdk/src/facebook.php';
 $config = array(
   'appId'  => '519404198096257',
   'secret' => '586e0fb7210204eb364143c2cf6de381',
+  'cookie' => true,
   );
 
 $facebook = new Facebook($config);
@@ -45,13 +46,13 @@ if ($user) {
 
   $json = array(
     "sent_counts" => $sent_counts,
-    "recv_counts" => $recv_counts
+    "recv_counts" => $recv_counts,
     );
 
     echo json_encode($json);
 } else {
     // unauthorized
-  header('HTTP/1.0 404 Not Found', true, 401);
+  header('HTTP/1.0 401 Unauthorized', true, 401);
 }
 
 ?>
